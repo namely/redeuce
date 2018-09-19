@@ -1,9 +1,9 @@
 {
   "name": "redeuce",
-  "version": "0.1",
+  "version": "1.0.0-alpha.1",
   "engines": {
-    "node": "8.9.3",
-    "npm": "6.0.1"
+    "node": "8.9",
+    "npm": "6"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.0",
@@ -18,5 +18,8 @@
     "eslint-plugin-import": "^2.14.0",
     "jest": "^23.6.0",
     "regenerator-runtime": "^0.12.1"
+  },
+  "scripts": {
+    "test": "NODE_ENV=development jest --config jest.conf.json --colors --notify"
   }
 }
