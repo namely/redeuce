@@ -1,6 +1,7 @@
 {
   "name": "redeuce",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.0",
+  "main": "dist/redeuce.min.js",
   "engines": {
     "node": "8.9",
     "npm": "6"
@@ -17,9 +18,14 @@
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.14.0",
     "jest": "^23.6.0",
-    "regenerator-runtime": "^0.12.1"
+    "regenerator-runtime": "^0.12.1",
+    "rollup": "^0.66.1",
+    "rollup-plugin-babel": "^4.0.3",
+    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-uglify": "^6.0.0"
   },
   "scripts": {
+    "build": "rollup -c -o dist/redeuce.min.js",
     "test": "NODE_ENV=development jest --config jest.conf.json --colors --notify"
   }
 }
