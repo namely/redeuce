@@ -1,11 +1,15 @@
-import { generateCollectionStore } from 'index.js';
+import { collectionStoreGenerators, collectionStore, generateCollectionStore } from 'index.js';
 
 const makeEntityName = () => `random/${Math.round(Math.random() * 1000000000)}`;
 
 describe('Collection Store', () => {
+  test('alias', () => {
+    expect(generateCollectionStore).toBe(collectionStoreGenerators);
+  });
+
   test('collection provide the expected tools', () => {
     const entityName = makeEntityName();
-    const gen = generateCollectionStore(entityName);
+    const gen = collectionStoreGenerators(entityName);
     expect(gen).toHaveProperty('getActionCreators');
     expect(gen).toHaveProperty('getReducer');
 
@@ -29,25 +33,42 @@ describe('Collection Store', () => {
     expect(gen.getActionCreators().clear).toBe(gen().clear);
   });
 
+  test('quick collection provide the expected tools', () => {
+    const entityName = makeEntityName();
+    const gen = collectionStore(entityName);
+
+    expect(gen).toHaveProperty('set');
+    expect(gen).toHaveProperty('update');
+    expect(gen).toHaveProperty('delete');
+    expect(gen).toHaveProperty('merge');
+    expect(gen).toHaveProperty('mergeDeep');
+    expect(gen).toHaveProperty('deleteAll');
+    expect(gen).toHaveProperty('clear');
+    expect(gen).toHaveProperty('reducer');
+  });
+
   test('collection are memoized', () => {
     const entityName = makeEntityName();
-    const gen1 = generateCollectionStore(entityName);
-    const gen2 = generateCollectionStore(entityName);
+    const gen1 = collectionStoreGenerators(entityName);
+    const gen2 = collectionStoreGenerators(entityName);
+    const gen3 = collectionStore(entityName);
 
     expect(gen1).toBe(gen2);
+    expect(gen3.reducer).toBe(gen1().reducer);
+    expect(gen3.reducer).toBe(gen2().reducer);
   });
 
   test('memoized collections with different options throw an error', () => {
     expect(() => {
       const entityName = makeEntityName();
-      const gen1 = generateCollectionStore(entityName);
-      const gen2 = generateCollectionStore(entityName, { idKey: 'uuid' });
+      const gen1 = collectionStoreGenerators(entityName);
+      const gen2 = collectionStoreGenerators(entityName, { idKey: 'uuid' });
     }).toThrow();
   });
 
   describe('collection action creators', () => {
     const entityName = makeEntityName();
-    const actions = generateCollectionStore(entityName).getActionCreators();
+    const actions = collectionStoreGenerators(entityName).getActionCreators();
 
     test('single entity set action creator', () => {
       expect(actions.set('hello')).toEqual({
@@ -104,7 +125,7 @@ describe('Collection Store', () => {
 
     test('default reducer call', () => {
       const entityName = makeEntityName();
-      const { reducer } = generateCollectionStore(entityName)();
+      const { reducer } = collectionStoreGenerators(entityName)();
 
       expect(reducer(undefined, { type: 'NOTHING' })).toEqual([]);
     });
@@ -112,7 +133,7 @@ describe('Collection Store', () => {
     test('default value', () => {
       const entityName = makeEntityName();
       const defaultValue = [{ id: 'yes' }];
-      const { reducer } = generateCollectionStore(entityName, {
+      const { reducer } = collectionStoreGenerators(entityName, {
         defaultValue,
       })();
 
@@ -126,7 +147,7 @@ describe('Collection Store', () => {
       const entity = { id: 3, name: 'hello' };
       const expected = [...state, entity];
 
-      const { set, reducer } = generateCollectionStore(entityName)();
+      const { set, reducer } = collectionStoreGenerators(entityName)();
 
       expect(reducer(state, set(entity))).toEqual(expected);
     });
@@ -135,7 +156,7 @@ describe('Collection Store', () => {
       const entity = { id: 0, name: 'hello' };
       const expected = [entity, ...state];
 
-      const { set, reducer } = generateCollectionStore(entityName)();
+      const { set, reducer } = collectionStoreGenerators(entityName)();
 
       expect(reducer(state, set(entity))).toEqual(expected);
     });
@@ -144,7 +165,7 @@ describe('Collection Store', () => {
       const entity = { id: 1, newkey: 'modified' };
       const expected = [entity, state[1]];
 
-      const { set, reducer } = generateCollectionStore(entityName)();
+      const { set, reducer } = collectionStoreGenerators(entityName)();
 
       expect(reducer(state, set(entity))).toEqual(expected);
     });
@@ -153,7 +174,7 @@ describe('Collection Store', () => {
       const entity = { uuid: 1, newkey: 'modified' };
       const expected = [entity, stateUuid[1]];
 
-      const { set, reducer } = generateCollectionStore(entityName, {
+      const { set, reducer } = collectionStoreGenerators(entityName, {
         idKey: 'uuid',
       })();
 
@@ -164,7 +185,7 @@ describe('Collection Store', () => {
       const entity = { name: 'hello' };
       const expected = state;
 
-      const { set, reducer } = generateCollectionStore(entityName)();
+      const { set, reducer } = collectionStoreGenerators(entityName)();
 
       expect(reducer(state, set(entity))).toEqual(expected);
     });
@@ -173,7 +194,7 @@ describe('Collection Store', () => {
       const entity = { id: 4, name: 'hello' };
       const expected = stateUuid;
 
-      const { set, reducer } = generateCollectionStore(entityName, {
+      const { set, reducer } = collectionStoreGenerators(entityName, {
         idKey: 'uuid',
       })();
 
@@ -187,7 +208,7 @@ describe('Collection Store', () => {
       const entity = { id: 1, bar: 'baz' };
       const expected = [{ ...state[0], bar: 'baz' }, state[1]];
 
-      const { update, reducer } = generateCollectionStore(entityName)();
+      const { update, reducer } = collectionStoreGenerators(entityName)();
 
       expect(reducer(state, update(entity))).toEqual(expected);
     });
@@ -196,7 +217,7 @@ describe('Collection Store', () => {
       const entity = { uuid: 1, bar: 'baz' };
       const expected = [{ ...stateUuid[0], bar: 'baz' }, stateUuid[1]];
 
-      const { update, reducer } = generateCollectionStore(entityName, {
+      const { update, reducer } = collectionStoreGenerators(entityName, {
         idKey: 'uuid',
       })();
 
@@ -207,7 +228,7 @@ describe('Collection Store', () => {
       const entity = { id: 3, bar: 'baz' };
       const expected = [...state, entity];
 
-      const { update, reducer } = generateCollectionStore(entityName)();
+      const { update, reducer } = collectionStoreGenerators(entityName)();
 
       expect(reducer(state, update(entity))).toEqual(expected);
     });
@@ -216,7 +237,7 @@ describe('Collection Store', () => {
       const entity = { id: 3, bar: 'baz' };
       const expected = [...state, entity];
 
-      const { update, reducer } = generateCollectionStore(entityName)();
+      const { update, reducer } = collectionStoreGenerators(entityName)();
 
       expect(reducer(state, update(entity))).toEqual(expected);
     });
@@ -228,7 +249,7 @@ describe('Collection Store', () => {
       const entity = { id: 1 };
       const expected = [state[1]];
 
-      const { reducer, ...actions } = generateCollectionStore(entityName)();
+      const { reducer, ...actions } = collectionStoreGenerators(entityName)();
 
       expect(reducer(state, actions.delete(entity))).toEqual(expected);
     });
@@ -238,7 +259,7 @@ describe('Collection Store', () => {
       const entity = { id: 4 };
       const expected = state;
 
-      const { reducer, ...actions } = generateCollectionStore(entityName)();
+      const { reducer, ...actions } = collectionStoreGenerators(entityName)();
 
       expect(reducer(state, actions.delete(entity))).toEqual(expected);
     });
@@ -250,7 +271,7 @@ describe('Collection Store', () => {
       const entities = [{ id: 3, name: 'hello' }, { id: 4, name: 'baz' }];
       const expected = [...state, ...entities];
 
-      const { merge, reducer } = generateCollectionStore(entityName)();
+      const { merge, reducer } = collectionStoreGenerators(entityName)();
 
       expect(reducer(state, merge(entities))).toEqual(expected);
     });
@@ -259,7 +280,7 @@ describe('Collection Store', () => {
       const entities = [{ id: 2, name: 'hello' }, { id: 3, name: 'baz' }];
       const expected = [state[0], ...entities];
 
-      const { merge, reducer } = generateCollectionStore(entityName)();
+      const { merge, reducer } = collectionStoreGenerators(entityName)();
 
       expect(reducer(state, merge(entities))).toEqual(expected);
     });
@@ -268,7 +289,7 @@ describe('Collection Store', () => {
       const entities = [{ id: 2, name: 'hello' }, { id: 3, name: 'baz' }, { name: '4' }];
       const expected = [state[0], entities[0], entities[1]];
 
-      const { merge, reducer } = generateCollectionStore(entityName)();
+      const { merge, reducer } = collectionStoreGenerators(entityName)();
 
       expect(reducer(state, merge(entities))).toEqual(expected);
     });
@@ -277,7 +298,7 @@ describe('Collection Store', () => {
       const entities = [{ uuid: 2, name: 'hello' }, { uuid: 3, name: 'baz' }, { id: 4, name: '4' }];
       const expected = [stateUuid[0], entities[0], entities[1]];
 
-      const { merge, reducer } = generateCollectionStore(entityName, {
+      const { merge, reducer } = collectionStoreGenerators(entityName, {
         idKey: 'uuid',
       })();
 
@@ -291,7 +312,7 @@ describe('Collection Store', () => {
       const entities = [{ id: 1, newKey: 'newValue' }, { id: 2, newKey: 'newValue' }];
       const expected = [{ ...state[0], newKey: 'newValue' }, { ...state[1], newKey: 'newValue' }];
 
-      const { mergeDeep, reducer } = generateCollectionStore(entityName)();
+      const { mergeDeep, reducer } = collectionStoreGenerators(entityName)();
 
       expect(reducer(state, mergeDeep(entities))).toEqual(expected);
     });
@@ -304,7 +325,7 @@ describe('Collection Store', () => {
         { id: 3, newKey: 'newValue' },
       ];
 
-      const { mergeDeep, reducer } = generateCollectionStore(entityName)();
+      const { mergeDeep, reducer } = collectionStoreGenerators(entityName)();
 
       expect(reducer(state, mergeDeep(entities))).toEqual(expected);
     });
@@ -316,7 +337,7 @@ describe('Collection Store', () => {
       const entities = [{ id: 1, newKey: 'newValue' }, { id: 2, newKey: 'newValue' }];
       const expected = [];
 
-      const { deleteAll, reducer } = generateCollectionStore(entityName)();
+      const { deleteAll, reducer } = collectionStoreGenerators(entityName)();
 
       expect(reducer(state, deleteAll(entities))).toEqual(expected);
     });
@@ -325,7 +346,7 @@ describe('Collection Store', () => {
       const entities = [{ id: 3, newKey: 'newValue' }, { id: 4, newKey: 'newValue' }];
       const expected = state;
 
-      const { deleteAll, reducer } = generateCollectionStore(entityName)();
+      const { deleteAll, reducer } = collectionStoreGenerators(entityName)();
 
       expect(reducer(state, deleteAll(entities))).toEqual(expected);
     });
@@ -336,7 +357,7 @@ describe('Collection Store', () => {
       const entityName = makeEntityName();
       const expected = [];
 
-      const { reducer, clear } = generateCollectionStore(entityName)();
+      const { reducer, clear } = collectionStoreGenerators(entityName)();
 
       expect(reducer(state, clear())).toEqual(expected);
     });
