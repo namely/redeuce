@@ -1,6 +1,4 @@
-const sortByKeyName = keyName => (a, b) => a[keyName] > b[keyName];
-const getKeyNameValues = (entities, keyName) =>
-  entities.map(({ [keyName]: id }) => id);
+const getKeyNameValues = (entities, keyName) => entities.map(({ [keyName]: id }) => id);
 
 const filterByKeyname = (entities, keyName) =>
   entities.filter(({ [keyName]: id }) => id !== undefined);
@@ -14,23 +12,13 @@ const filterByIndexes = (entities, indexes, keyName) =>
 const findOneByIndex = (entities, keyName, uniqueId) =>
   entities.find(({ [keyName]: id }) => id === uniqueId);
 
-export const buildReducer = (reducers, defaultValue) => (
-  state = defaultValue,
-  { type, payload }
-) => (reducers[type] ? reducers[type](state, payload) : state);
+export const buildReducer = (reducers, defaultValue) => (state = defaultValue, { type, payload }) =>
+  reducers[type] ? reducers[type](state, payload) : state;
 
 const asArray = o => [].concat(o);
 
 export const buildCollectionReducers = (actionTypes, keyName) => {
-  const {
-    SET,
-    UPDATE,
-    DELETE,
-    MERGE,
-    MERGEDEEP,
-    DELETEALL,
-    CLEAR
-  } = actionTypes;
+  const { SET, UPDATE, DELETE, MERGE, MERGEDEEP, DELETEALL, CLEAR } = actionTypes;
 
   // Reducer to SET a list of objects in the store
   const setReducer = (state, payload) => {
@@ -41,8 +29,8 @@ export const buildCollectionReducers = (actionTypes, keyName) => {
       // the list of objects from the previous state that are not to be replaced
       ...filterWithoutIndexes(state, setIndexes, keyName),
       // the list of new objects
-      ...filteredPayload
-    ].sort(sortByKeyName(keyName));
+      ...filteredPayload,
+    ];
   };
 
   // Reducer to UPDATE a list of objects in the store
@@ -58,11 +46,11 @@ export const buildCollectionReducers = (actionTypes, keyName) => {
       // mapped to be merged with the new version
       ...filterByIndexes(state, updateIndexes, keyName).map(obj => ({
         ...obj,
-        ...findOneByIndex(filteredPayload, keyName, obj[keyName])
+        ...findOneByIndex(filteredPayload, keyName, obj[keyName]),
       })),
       // the list new objects that are not existing in the previous state
-      ...filterWithoutIndexes(filteredPayload, existingIndexes, keyName)
-    ].sort(sortByKeyName(keyName));
+      ...filterWithoutIndexes(filteredPayload, existingIndexes, keyName),
+    ];
   };
 
   // Reducer to DELETE a list of objects in the store
@@ -72,8 +60,8 @@ export const buildCollectionReducers = (actionTypes, keyName) => {
 
     return [
       // the list of objects from the previous state that are not to be deleted
-      ...filterWithoutIndexes(state, setIndexes, keyName)
-    ].sort(sortByKeyName(keyName));
+      ...filterWithoutIndexes(state, setIndexes, keyName),
+    ];
   };
 
   const clearReducer = () => [];
@@ -85,7 +73,7 @@ export const buildCollectionReducers = (actionTypes, keyName) => {
     [MERGE]: setReducer,
     [MERGEDEEP]: updateReducer,
     [DELETEALL]: deleteReducer,
-    [CLEAR]: clearReducer
+    [CLEAR]: clearReducer,
   };
 };
 
@@ -96,6 +84,6 @@ export const buildSimpleReducer = actionTypes => {
   const setReducer = (_, payload) => payload;
 
   return {
-    [SET]: setReducer
+    [SET]: setReducer,
   };
 };

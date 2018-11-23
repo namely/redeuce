@@ -151,19 +151,11 @@ describe('Collection Store', () => {
 
       expect(reducer(state, set(entity))).toEqual(expected);
     });
-    test('set a single entity and orders key by keyName', () => {
-      const entityName = makeEntityName();
-      const entity = { id: 0, name: 'hello' };
-      const expected = [entity, ...state];
 
-      const { set, reducer } = collectionStoreGenerators(entityName)();
-
-      expect(reducer(state, set(entity))).toEqual(expected);
-    });
     test('set a single entity: replace exisitng one', () => {
       const entityName = makeEntityName();
       const entity = { id: 1, newkey: 'modified' };
-      const expected = [entity, state[1]];
+      const expected = [state[1], entity];
 
       const { set, reducer } = collectionStoreGenerators(entityName)();
 
@@ -172,7 +164,7 @@ describe('Collection Store', () => {
     test('set a single entity: replace exisitng one - with a custom id key', () => {
       const entityName = makeEntityName();
       const entity = { uuid: 1, newkey: 'modified' };
-      const expected = [entity, stateUuid[1]];
+      const expected = [stateUuid[1], entity];
 
       const { set, reducer } = collectionStoreGenerators(entityName, {
         idKey: 'uuid',
@@ -206,7 +198,7 @@ describe('Collection Store', () => {
     test('update a single entity', () => {
       const entityName = makeEntityName();
       const entity = { id: 1, bar: 'baz' };
-      const expected = [{ ...state[0], bar: 'baz' }, state[1]];
+      const expected = [state[1], { ...state[0], bar: 'baz' }];
 
       const { update, reducer } = collectionStoreGenerators(entityName)();
 
@@ -215,7 +207,7 @@ describe('Collection Store', () => {
     test('update a single entity with custom id key', () => {
       const entityName = makeEntityName();
       const entity = { uuid: 1, bar: 'baz' };
-      const expected = [{ ...stateUuid[0], bar: 'baz' }, stateUuid[1]];
+      const expected = [stateUuid[1], { ...stateUuid[0], bar: 'baz' }];
 
       const { update, reducer } = collectionStoreGenerators(entityName, {
         idKey: 'uuid',
