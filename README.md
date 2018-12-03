@@ -25,12 +25,12 @@ Let's take as an example a redux store designed as follow:
 
 Redeuce will help you splitting this store into 4 easily manageable sub part.
 
-* `ui` that consist of two simple keys:
-  * `isLoading`
-  * `filter`
-* `db` that consists of two collection keys:
-  * `users`
-  * `messages`
+- `ui` that consist of two simple keys:
+  - `isLoading`
+  - `filter`
+- `db` that consists of two collection keys:
+  - `users`
+  - `messages`
 
 ## simpleStore
 
@@ -91,7 +91,7 @@ const {
   delete: deleteMessage,
   mergeDeep: mergeDeepMessages,
   reducer: messages,
-} = collectionStore('db/messages', { entityIdkeyName: 'mId' });
+} = collectionStore('db/messages', { idkey: 'mId' });
 
 // action creators
 export { setUser, mergeUsers, setMessage, deleteMessage, mergeDeepMessages };
@@ -176,5 +176,5 @@ console.log(store.getState());
 
 ## what now?
 
-* See the basic example (TODO)
-* Read the full API (TODO)
+- See the basic example (TODO)
+- Read the full API (TODO)
