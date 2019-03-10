@@ -4,7 +4,7 @@ export default function memoize(fn) {
     const key = JSON.stringify(args[0]);
     if (memoize.cache[key]) {
       if (JSON.stringify(args) !== JSON.stringify(memoize.cache[key].args)) {
-        throw new Error(`boo ${JSON.stringify(args)} ${JSON.stringify(memoize.cache[key].args)}`);
+        throw new Error(`[Redeuce][Error] Store ${key} already exists`);
       }
       return memoize.cache[key].val;
     } else {

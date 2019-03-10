@@ -68,7 +68,7 @@ describe('Simple Store', () => {
     test('single entity set action creator', () => {
       expect(actions.set('hello')).toEqual({
         type: `REDEUCE:SIMPLE@@${entityName}@@SET`,
-        payload: 'hello',
+        payload: ['hello'],
       });
     });
   });
