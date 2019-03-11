@@ -46,24 +46,17 @@ describe('Array Store', () => {
     expect(gen3.reducer).toBe(gen2().reducer);
   });
 
-  test('memoized collections with different options throw an error', () => {
+  test('memoized array with different options throw an error', () => {
     expect(() => {
       const entityName = makeEntityName();
       const gen1 = arrayStoreGenerators(entityName);
-      const gen2 = arrayStoreGenerators(entityName, { idKey: 'uuid' });
+      const gen2 = arrayStoreGenerators(entityName, { defaultValue: 'uuid' });
     }).toThrow();
   });
 
   describe('Array Store action creators', () => {
     const entityName = makeEntityName();
     const actions = arrayStoreGenerators(entityName).getActionCreators();
-
-    test('Array entity set action creator', () => {
-      expect(actions.set('hello')).toEqual({
-        type: `REDEUCE:ARRAY@@${entityName}@@SET`,
-        payload: ['hello'],
-      });
-    });
 
     test('set', () => {
       expect(actions.set('hello', 2)).toEqual({
