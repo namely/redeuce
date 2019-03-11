@@ -18,12 +18,9 @@ describe('Array Store', () => {
     );
 
     expect(generator.getReducer()).toBe(generated.reducer);
-
-    expect(generator.getActionCreators().set).toBe(generated.set);
-    expect(generator.getActionCreators().push).toBe(generated.push);
-    expect(generator.getActionCreators().pop).toBe(generated.pop);
-    expect(generator.getActionCreators().delete).toBe(generated.delete);
-    expect(generator.getActionCreators().clear).toBe(generated.clear);
+    ['set', 'delete', 'insert', 'clear', 'push', 'pop', 'unshift', 'shift'].forEach(s => {
+      expect(generator.getActionCreators()[s]).toBe(generated[s]);
+    });
   });
   test('quick Array store provides the expected tools', () => {
     const entityName = makeEntityName();
