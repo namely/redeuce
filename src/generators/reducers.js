@@ -90,9 +90,9 @@ export const buildSimpleReducer = actionTypes => {
 
 export const buildArrayReducers = (actionTypes, keyName) => {
   const clearReducer = () => [];
-  const pushReducer = (state, payload) => [...state, payload[0]];
+  const pushReducer = (state, payload) => [...state, ...payload];
   const popReducer = state => state.slice(0, state.length - 1);
-  const unshiftReducer = (state, payload) => [payload[0], ...state];
+  const unshiftReducer = (state, payload) => [...payload, ...state];
   const shiftReducer = state => state.slice(1, state.length);
   const deleteReducer = (state, payload) => state.filter((_, i) => i !== payload[0]);
   const insertReducer = (state, payload) => {

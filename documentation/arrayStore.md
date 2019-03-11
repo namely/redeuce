@@ -103,6 +103,7 @@ store.getState(); // []
 store.dispatch(push('hello')); // ['hello']
 store.dispatch(push('cruel')); // ['hello', 'cruel']
 store.dispatch(push('world')); // ['hello', 'cruel', 'world']
+store.dispatch(push(1, 2, 3)); // ['hello', 'cruel', 'world', 1, 2, 3]
 ```
 
 ### pop
@@ -131,6 +132,7 @@ store.dispatch(unshift(3)); // [3]
 store.dispatch(unshift(2)); // [2, 3]
 store.dispatch(unshift(1)); // [1, 2, 3]
 store.dispatch(unshift(0)); // [0, 1, 2, 3]
+store.dispatch(unshift(-3, -2, -1)); // [-3, -2, -1, 0, 1, 2, 3]
 ```
 
 ## shift
