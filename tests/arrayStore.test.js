@@ -182,7 +182,9 @@ describe('Array Store', () => {
       test('push a value into an Array', () => {
         expect(reducer(['a'], push('b'))).toEqual(['a', 'b']);
         expect(reducer(['a', 'b', 'c'], push('d'))).toEqual(['a', 'b', 'c', 'd']);
-        expect(reducer(['a', 'b', 'c'], push())).toEqual(['a', 'b', 'c', undefined]);
+        expect(reducer(['a', 'b'], push('c', 'd', 'e'))).toEqual(['a', 'b', 'c', 'd', 'e']);
+        expect(reducer(['a', 'b', 'c'], push())).toEqual(['a', 'b', 'c']);
+        expect(reducer(['a', 'b', 'c'], push(undefined))).toEqual(['a', 'b', 'c', undefined]);
       });
     });
 
@@ -207,8 +209,10 @@ describe('Array Store', () => {
 
       test('unshift a value into an Array', () => {
         expect(reducer(['a'], unshift('b'))).toEqual(['b', 'a']);
-        expect(reducer(['a', 'b', 'c'], unshift('d'))).toEqual(['d', 'a', 'b', 'c']);
-        expect(reducer(['a', 'b', 'c'], unshift())).toEqual([undefined, 'a', 'b', 'c']);
+        expect(reducer(['b', 'c'], unshift('a'))).toEqual(['a', 'b', 'c']);
+        expect(reducer(['c'], unshift('a', 'b'))).toEqual(['a', 'b', 'c']);
+        expect(reducer(['a', 'b', 'c'], unshift())).toEqual(['a', 'b', 'c']);
+        expect(reducer(['a', 'b', 'c'], unshift(undefined))).toEqual([undefined, 'a', 'b', 'c']);
       });
     });
 
