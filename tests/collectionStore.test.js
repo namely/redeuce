@@ -73,43 +73,44 @@ describe('Collection Store', () => {
     test('single entity set action creator', () => {
       expect(actions.set('hello')).toEqual({
         type: `REDEUCE:COLLECTION@@${entityName}@@SET`,
-        payload: 'hello',
+        payload: ['hello'],
       });
     });
     test('single update action creator', () => {
       expect(actions.update('hello')).toEqual({
         type: `REDEUCE:COLLECTION@@${entityName}@@UPDATE`,
-        payload: 'hello',
+        payload: ['hello'],
       });
     });
     test('single delete action creator', () => {
       expect(actions.delete('hello')).toEqual({
         type: `REDEUCE:COLLECTION@@${entityName}@@DELETE`,
-        payload: 'hello',
+        payload: ['hello'],
       });
     });
 
     test('bulk entities set action creator', () => {
       expect(actions.merge('hello')).toEqual({
         type: `REDEUCE:COLLECTION@@${entityName}@@MERGE`,
-        payload: 'hello',
+        payload: ['hello'],
       });
     });
     test('bulk update action creator', () => {
       expect(actions.mergeDeep('hello')).toEqual({
         type: `REDEUCE:COLLECTION@@${entityName}@@MERGEDEEP`,
-        payload: 'hello',
+        payload: ['hello'],
       });
     });
     test('bulk delete action creator', () => {
       expect(actions.deleteAll('hello')).toEqual({
         type: `REDEUCE:COLLECTION@@${entityName}@@DELETEALL`,
-        payload: 'hello',
+        payload: ['hello'],
       });
     });
     test('clear action creator', () => {
       expect(actions.clear()).toEqual({
         type: `REDEUCE:COLLECTION@@${entityName}@@CLEAR`,
+        payload: [],
       });
     });
   });

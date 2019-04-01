@@ -1,4 +1,10 @@
 export {
+  default as generateArrayStore,
+  default as arrayStoreGenerators,
+  arrayStore,
+} from './arrayStore';
+
+export {
   default as generateCollectionStore,
   default as collectionStoreGenerators,
   collectionStore,
