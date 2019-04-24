@@ -1,5 +1,10 @@
 # Redeuce Changelog
 
+## 1.0.0-alpha.4 (2019-04-24)
+
+- New arrayStore
+- Documentation
+
 ## 1.0.0-alpha.3 (2018-12-03)
 
 - removed auto sorting of collections
