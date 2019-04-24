@@ -17,7 +17,7 @@ Technically, this can be anything. It will be useful for you as you look into th
 
 ### options
 
-Each generator can have it's own specific options.
+Each generator can have it's own specific options, see each generator doc below for more details.
 
 ## Generators
 

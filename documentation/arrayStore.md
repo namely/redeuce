@@ -5,6 +5,7 @@ const {
   reducer,
 
   set,
+  setIn,
   delete,
   insert,
   clear,
@@ -51,6 +52,21 @@ store.getState(); // [0, 1, 2]
 store.dispatch(set(1, 0)); // [1, 1, 2]
 store.dispatch(set(3, 2)); // [1, 1, 3]
 store.dispatch(set(2, 1)); // [1, 2, 3]
+```
+
+### setIn
+
+`setIn(value, index)`
+
+```js
+const { set, reducer } = arrayStore('examples/array', {
+  defaultValue: [{ a: 0 }, { a: 1 }, { a: 2 }],
+});
+const store = createStore(reducer);
+
+store.getState(); // [{ a: 0 }, { a: 1 }, { a: 2 }]
+store.dispatch(setIn({ a: 'b' }, 0)); // [{ a: 'b' }, { a: 1 }, { a: 2 }]
+store.dispatch(setIn({ a: 'b' }, 1)); // [{ a: 'b' }, { a: 'b' }, { a: 2 }]
 ```
 
 ### delete

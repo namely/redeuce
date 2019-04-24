@@ -2,6 +2,13 @@
 
 `redeuce` is a collection of tools that generates micro redux store.
 
+## Quick links
+
+- [Read the full API](./documentation/index.md)
+- See some basic examples (TODO)
+
+## About Redeuce
+
 Let's take as an example a redux store designed as follow:
 
 ```json
@@ -23,7 +30,7 @@ Let's take as an example a redux store designed as follow:
 }
 ```
 
-Redeuce will help you splitting this store into 4 easily manageable sub part.
+Redeuce will help you splitting this store into easily manageable sub parts.
 
 - `ui` that consist of two simple keys:
   - `isLoading`
@@ -174,7 +181,6 @@ console.log(store.getState());
 */
 ```
 
-## what now?
+## arrayStore
 
-- See the basic example (TODO)
-- Read the full API (TODO)
+Additionally, redeuce also provide an `arrayStore` utility.
