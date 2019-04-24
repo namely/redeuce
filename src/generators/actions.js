@@ -16,6 +16,7 @@ export const VERBS = {
   },
   [ARRAY]: {
     SET: 'set',
+    SETIN: 'setIn',
     DELETE: 'delete',
     INSERT: 'insert',
     CLEAR: 'clear',

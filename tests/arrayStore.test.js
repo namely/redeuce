@@ -11,14 +11,23 @@ describe('Array Store', () => {
     expect(generator).toHaveProperty('getActionCreators');
     expect(generator).toHaveProperty('getReducer');
 
-    ['reducer', 'set', 'delete', 'insert', 'clear', 'push', 'pop', 'unshift', 'shift'].forEach(
-      s => {
-        expect(generated).toHaveProperty(s);
-      },
-    );
+    [
+      'reducer',
+      'set',
+      'setIn',
+      'delete',
+      'insert',
+      'clear',
+      'push',
+      'pop',
+      'unshift',
+      'shift',
+    ].forEach(s => {
+      expect(generated).toHaveProperty(s);
+    });
 
     expect(generator.getReducer()).toBe(generated.reducer);
-    ['set', 'delete', 'insert', 'clear', 'push', 'pop', 'unshift', 'shift'].forEach(s => {
+    ['set', 'setIn', 'delete', 'insert', 'clear', 'push', 'pop', 'unshift', 'shift'].forEach(s => {
       expect(generator.getActionCreators()[s]).toBe(generated[s]);
     });
   });
@@ -26,11 +35,20 @@ describe('Array Store', () => {
     const entityName = makeEntityName();
     const gen = arrayStore(entityName);
 
-    [('reducer', 'set', 'delete', 'insert', 'clear', 'push', 'pop', 'unshift', 'shift')].forEach(
-      s => {
-        expect(gen).toHaveProperty(s);
-      },
-    );
+    [
+      'reducer',
+      'set',
+      'setIn',
+      'delete',
+      'insert',
+      'clear',
+      'push',
+      'pop',
+      'unshift',
+      'shift',
+    ].forEach(s => {
+      expect(gen).toHaveProperty(s);
+    });
   });
 
   test('Array Stores are memoized', () => {
@@ -40,10 +58,21 @@ describe('Array Store', () => {
     const gen3 = arrayStore(entityName);
 
     expect(gen1).toBe(gen2);
-    expect(gen3.set).toBe(gen1().set);
-    expect(gen3.set).toBe(gen2().set);
-    expect(gen3.reducer).toBe(gen1().reducer);
-    expect(gen3.reducer).toBe(gen2().reducer);
+    [
+      'reducer',
+      'set',
+      'setIn',
+      'delete',
+      'insert',
+      'clear',
+      'push',
+      'pop',
+      'unshift',
+      'shift',
+    ].forEach(s => {
+      expect(gen3[s]).toBe(gen1()[s]);
+      expect(gen3[s]).toBe(gen2()[s]);
+    });
   });
 
   test('memoized array with different options throw an error', () => {
@@ -134,6 +163,19 @@ describe('Array Store', () => {
         expect(reducer(['a'], set('b', 1))).toEqual(['a', 'b']);
         expect(reducer(['a'], set('b', 0))).toEqual(['b']);
         expect(reducer(['a', 'b'], set('b', 0))).toEqual(['b', 'b']);
+      });
+    });
+
+    // set
+    describe('setIn', () => {
+      const entityName = makeEntityName();
+      const { setIn, reducer } = arrayStore(entityName);
+
+      test('set a value of the Array', () => {
+        const ab = { a: 'a', b: 'b' };
+        const cd = { c: 'c', d: 'd' };
+        expect(reducer([ab, cd], setIn({ a: 'b' }, 0))).toEqual([{ a: 'b', b: 'b' }, cd]);
+        expect(reducer([ab, cd], setIn({ a: 'b' }, 1))).toEqual([ab, { a: 'b', c: 'c', d: 'd' }]);
       });
     });
 

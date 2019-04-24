@@ -105,10 +105,16 @@ export const buildArrayReducers = (actionTypes, keyName) => {
     a[payload[1]] = payload[0];
     return a;
   };
+  const setInReducer = (state, payload) => {
+    let a = [...state];
+    a[payload[1]] = { ...a[payload[1]], ...payload[0] };
+    return a;
+  };
 
-  const { SET, DELETE, INSERT, CLEAR, PUSH, POP, UNSHIFT, SHIFT } = actionTypes;
+  const { SET, SETIN, DELETE, INSERT, CLEAR, PUSH, POP, UNSHIFT, SHIFT } = actionTypes;
   return {
     [SET]: setReducer,
+    [SETIN]: setInReducer,
     [DELETE]: deleteReducer,
     [INSERT]: insertReducer,
     [CLEAR]: clearReducer,
