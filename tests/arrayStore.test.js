@@ -97,7 +97,7 @@ describe('Array Store', () => {
     test('delete', () => {
       expect(actions.delete(2)).toEqual({
         type: `REDEUCE:ARRAY@@${entityName}@@DELETE`,
-        payload: [2],
+        payload: 2,
       });
     });
 
@@ -111,7 +111,6 @@ describe('Array Store', () => {
     test('clear', () => {
       expect(actions.clear()).toEqual({
         type: `REDEUCE:ARRAY@@${entityName}@@CLEAR`,
-        payload: [],
       });
     });
 
@@ -120,6 +119,14 @@ describe('Array Store', () => {
         expect(actions[verb]('hello')).toEqual({
           type: `REDEUCE:ARRAY@@${entityName}@@${verb.toUpperCase()}`,
           payload: ['hello'],
+        });
+        expect(actions[verb]('hello', 'world')).toEqual({
+          type: `REDEUCE:ARRAY@@${entityName}@@${verb.toUpperCase()}`,
+          payload: ['hello', 'world'],
+        });
+        expect(actions[verb]('hello', 'cruel', 'world')).toEqual({
+          type: `REDEUCE:ARRAY@@${entityName}@@${verb.toUpperCase()}`,
+          payload: ['hello', 'cruel', 'world'],
         });
       });
     });
