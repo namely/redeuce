@@ -1,5 +1,10 @@
 # Redeuce Changelog
 
+## 1.0.0-alpha.5 (2019-05-02)
+
+- Fix a major bug introduced in alpha.4 (breaking action creator and reducers arity)
+- Full Documentation
+
 ## 1.0.0-alpha.4 (2019-04-24)
 
 - New arrayStore
