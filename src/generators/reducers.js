@@ -22,7 +22,7 @@ export const buildCollectionReducers = (actionTypes, keyName) => {
 
   // Reducer to SET a list of objects in the store
   const setReducer = (state, payload) => {
-    const filteredPayload = filterByKeyname(asArray(payload[0]), keyName);
+    const filteredPayload = filterByKeyname(asArray(payload), keyName);
     const setIndexes = getKeyNameValues(filteredPayload, keyName);
 
     return [
@@ -35,7 +35,7 @@ export const buildCollectionReducers = (actionTypes, keyName) => {
 
   // Reducer to UPDATE a list of objects in the store
   const updateReducer = (state, payload) => {
-    const filteredPayload = filterByKeyname(asArray(payload[0]), keyName);
+    const filteredPayload = filterByKeyname(asArray(payload), keyName);
     const updateIndexes = getKeyNameValues(filteredPayload, keyName);
     const existingIndexes = getKeyNameValues(state, keyName);
 
@@ -55,7 +55,7 @@ export const buildCollectionReducers = (actionTypes, keyName) => {
 
   // Reducer to DELETE a list of objects in the store
   const deleteReducer = (state, payload) => {
-    const filteredPayload = filterByKeyname(asArray(payload[0]), keyName);
+    const filteredPayload = filterByKeyname(asArray(payload), keyName);
     const setIndexes = getKeyNameValues(filteredPayload, keyName);
 
     return [
@@ -81,7 +81,7 @@ export const buildSimpleReducer = actionTypes => {
   const { SET } = actionTypes;
 
   // Reducer to SET a list of objects in the store
-  const setReducer = (_, payload) => payload[0];
+  const setReducer = (_, payload) => payload;
 
   return {
     [SET]: setReducer,
@@ -94,7 +94,7 @@ export const buildArrayReducers = (actionTypes, keyName) => {
   const popReducer = state => state.slice(0, state.length - 1);
   const unshiftReducer = (state, payload) => [...payload, ...state];
   const shiftReducer = state => state.slice(1, state.length);
-  const deleteReducer = (state, payload) => state.filter((_, i) => i !== payload[0]);
+  const deleteReducer = (state, payload) => state.filter((_, i) => i !== payload);
   const insertReducer = (state, payload) => {
     let a = [...state];
     a.splice(payload[1], 0, payload[0]);

@@ -3,27 +3,27 @@ export const COLLECTION = 'COLLECTION';
 export const ARRAY = 'ARRAY';
 export const VERBS = {
   [SIMPLE]: {
-    SET: 'set',
+    SET: { name: 'set' },
   },
   [COLLECTION]: {
-    SET: 'set',
-    UPDATE: 'update',
-    DELETE: 'delete',
-    MERGE: 'merge',
-    MERGEDEEP: 'mergeDeep',
-    DELETEALL: 'deleteAll',
-    CLEAR: 'clear',
+    SET: { name: 'set' },
+    UPDATE: { name: 'update' },
+    DELETE: { name: 'delete' },
+    MERGE: { name: 'merge' },
+    MERGEDEEP: { name: 'mergeDeep' },
+    DELETEALL: { name: 'deleteAll' },
+    CLEAR: { name: 'clear' },
   },
   [ARRAY]: {
-    SET: 'set',
-    SETIN: 'setIn',
-    DELETE: 'delete',
-    INSERT: 'insert',
-    CLEAR: 'clear',
-    PUSH: 'push',
-    POP: 'pop',
-    UNSHIFT: 'unshift',
-    SHIFT: 'shift',
+    SET: { name: 'set', arity: true },
+    SETIN: { name: 'setIn', arity: true },
+    DELETE: { name: 'delete' },
+    INSERT: { name: 'insert', arity: true },
+    CLEAR: { name: 'clear' },
+    PUSH: { name: 'push', arity: true },
+    POP: { name: 'pop', arity: true },
+    UNSHIFT: { name: 'unshift', arity: true },
+    SHIFT: { name: 'shift', arity: true },
   },
 };
 
@@ -38,14 +38,17 @@ export const generateActionTypes = (storeType, entityId) =>
     {},
   );
 
-const generateActionCreator = type => (...payload) => ({ type, payload });
+const generateActionCreator = (type, arity) => (...payload) =>
+  arity ? { type, payload } : { type, payload: payload[0] };
+
 export const generateActionCreators = (storeType, entityId) => {
   const actionTypes = generateActionTypes(storeType, entityId);
-  return Object.keys(VERBS[storeType]).reduce(
-    (actionCreators, verb) => ({
+  return Object.keys(VERBS[storeType]).reduce((actionCreators, verb) => {
+    const { name, arity } = VERBS[storeType][verb];
+
+    return {
       ...actionCreators,
-      [VERBS[storeType][verb]]: generateActionCreator(actionTypes[verb]),
-    }),
-    {},
-  );
+      [name]: generateActionCreator(actionTypes[verb], arity),
+    };
+  }, {});
 };
