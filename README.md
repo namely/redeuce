@@ -1,4 +1,7 @@
 # Redeuce
+ 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/4a250edeb0cb479c882dca7b827870e7)](https://app.codacy.com/gh/namely/redeuce/dashboard)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/4a250edeb0cb479c882dca7b827870e7)](https://app.codacy.com/gh/namely/redeuce/dashboard)
 
 `redeuce` is a collection of tools that generates micro redux store.
 
